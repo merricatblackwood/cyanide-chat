@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set, onValue } from 'firebase/database';
+import { getDatabase, ref, set, onValue, push } from 'firebase/database';
 import { getAnalytics } from 'firebase/analytics';
 import { useState, useEffect } from 'react';
 import {v4 as uuidv4} from 'uuid';
@@ -34,21 +34,11 @@ function App() {
         return listener;
     }, []);
 
-    const addData = () => {
-        set(ref(db, 'test/' + input), {
-            message: input,
-            id: uuidv4()
-        });
-    }
-
-
+    
     const sendMessage = () => {
-        const id = uuidv4();
-        const timestamp = Date.now();
-        set(ref(db, 'messages/' + "M" + messageCount), {
-            message: input, 
-            id: id,
-            timeStamp: timestamp,
+        const newMessageRef = push(messagesRef);
+        set(newMessageRef, {
+            message: input
         });
     }
 
